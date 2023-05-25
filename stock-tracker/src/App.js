@@ -1,13 +1,12 @@
+import React from 'react';
 import './App.css';
+import TickerWebSocket from './Ticker';
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-      <h1>Site Under Construction...</h1>
-      <img
-        src="https://media.giphy.com/media/fVeAI9dyD5ssIFyOyM/giphy.gif"
-        alt="octopus laying bricks"
-      />
+      <h1>Stock Tracker</h1>
+      <TickerWebSocket />
     </div>
   );
 }
