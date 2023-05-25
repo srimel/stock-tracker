@@ -24,7 +24,7 @@ const TickerWebSocket = () => {
       if (message.data) {
         const updatedTickerData = tickerData.map((item) => {
           const matchingItem = message.data.find((data) => data.s === item.symbol);
-          if (matchingItem) {
+          if (matchingItem && (matchingItem.c !== item.change || matchingItem.dp !== item.changePercent)) {
             return {
               symbol: matchingItem.s,
               price: matchingItem.p,
@@ -52,17 +52,19 @@ const TickerWebSocket = () => {
   }, [tickerData]); // Empty dependency array to ensure it runs only once
 
   return (
-    <section className="ticker">
+    <section className="ticker" style={{ display: 'flex', justifyContent: 'center', background: '#222', color: '#fff', padding: '10px' }}>
       {tickerData.map((item) => (
-        <div className="ticker-item" key={item.symbol}>
-          <span className="symbol">{item.symbol}</span>
-          <span className="price">{item.price}</span>
-          <div className={item.change >= 0 ? 'text-green' : 'text-red'}>
-            <span className="change">
-              {item.changePercent}% ({item.change})
-            </span>
+        (item.change !== 0 || item.changePercent !== 0) && (
+          <div className="ticker-item" key={item.symbol} style={{ marginRight: '10px' }}>
+            <span className="symbol" style={{ padding: '3px'}}>{item.symbol}</span>
+            <span className="price">{item.price}</span>
+            <div className={item.change >= 0 ? 'text-green' : 'text-red'}>
+              <span className="change">
+                0% (0)
+              </span>
+            </div>
           </div>
-        </div>
+        )
       ))}
     </section>
   );
