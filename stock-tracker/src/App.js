@@ -1,11 +1,12 @@
 import './App.css';
-import StockSectorMap from './StockSectorMap';
+import StockPrices from './StockPrices';
+
 
 function App() {
   return (
     <div className="App">
        <div>
-      <StockSectorMap />
+      <StockPrices />
     </div>
     </div>
   );
