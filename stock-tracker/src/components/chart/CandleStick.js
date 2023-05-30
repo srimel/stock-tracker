@@ -28,11 +28,17 @@ const CandleStick = (props) => {
       api_key.apiKey = process.env.REACT_APP_FINNHUB_API_KEY;
       const finnhubClient = new finnhub.DefaultApi();
 
+      const currentDate = Math.floor(Date.now() / 1000);
+      const threeMonthsAgo = currentDate - 7884000;
+      const oneYearAgo = currentDate - 31536000;
+
+      // TODO: add option to change timeframe
+      //  currently defaults to three months back from current date.
       finnhubClient.stockCandles(
         props.symbol1,
-        '1',
-        1684944000,
-        1684972800,
+        'D',
+        threeMonthsAgo,
+        currentDate,
         (error, data, response) => {
           if (error) {
             console.error(error);
