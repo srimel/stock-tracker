@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ApexCharts from 'apexcharts';
 import './CandleStick.css';
 
 const CandleStick = (props) => {
-  React.useEffect(() => {
+  const [timeFrame, setTimeFrame] = useState(7884000);
+  const chartRef = useRef(null);
+
+  useEffect(() => {
     function getCandleDataSeries(candleData) {
       const len = candleData.t.length;
       let dataSeries = [];
@@ -21,7 +24,6 @@ const CandleStick = (props) => {
       return dataSeries;
     }
 
-    // TODO: default to 1 year from current date timeframe
     function getStockData(stock) {
       const finnhub = require('finnhub');
       const api_key = finnhub.ApiClient.instance.authentications['api_key'];
@@ -29,15 +31,12 @@ const CandleStick = (props) => {
       const finnhubClient = new finnhub.DefaultApi();
 
       const currentDate = Math.floor(Date.now() / 1000);
-      const threeMonthsAgo = currentDate - 7884000;
-      const oneYearAgo = currentDate - 31536000;
+      const pastTime = currentDate - timeFrame;
 
-      // TODO: add option to change timeframe
-      //  currently defaults to three months back from current date.
       finnhubClient.stockCandles(
         props.symbol1,
         'D',
-        threeMonthsAgo,
+        pastTime,
         currentDate,
         (error, data, response) => {
           if (error) {
@@ -51,6 +50,10 @@ const CandleStick = (props) => {
     }
 
     function createCandleChart(data, symbol) {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+      }
+
       const dataSeries = getCandleDataSeries(data);
       console.log(`${props.symbol1} candlestick chart`, dataSeries);
 
@@ -82,20 +85,26 @@ const CandleStick = (props) => {
       };
 
       const chartID = `chart-${props.symbol1}`;
-      const chart = new ApexCharts(
+      const newChart = new ApexCharts(
         document.querySelector(`#${chartID}`),
         options,
       );
-      chart.render();
+      newChart.render();
+      chartRef.current = newChart;
     }
     getStockData(props.symbol1);
-  }, [props.symbol1]);
+  }, [props.symbol1, timeFrame]);
 
   const chartID = `chart-${props.symbol1}`;
 
   return (
     <div className="candlestick">
       <div id={chartID}></div>
+      <div>
+        <button onClick={() => setTimeFrame(7884000)}>3 Months</button>
+        <button onClick={() => setTimeFrame(15768000)}>6 Months</button>
+        <button onClick={() => setTimeFrame(31536000)}>1 Year</button>
+      </div>
     </div>
   );
 };
