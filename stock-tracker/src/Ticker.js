@@ -4,7 +4,7 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 const Ticker = () => {
   //  Configure socket
-  const socketUrl = `wss://ws.finnhub.io?token=${process.env.REACT_APP_API_KEY}`;
+  const socketUrl = `wss://ws.finnhub.io?token=${process.env.REACT_APP_FINNHUB_API_KEY}`;
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
   //  Define stock symbols to be tracked
