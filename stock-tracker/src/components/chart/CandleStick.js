@@ -81,6 +81,11 @@ const CandleStick = (props) => {
           tooltip: {
             enabled: true,
           },
+          labels: {
+            formatter: function (val) {
+              return val.toFixed(2);
+            },
+          },
         },
       };
 
@@ -100,7 +105,7 @@ const CandleStick = (props) => {
   return (
     <div className="candlestick">
       <div id={chartID}></div>
-      <div>
+      <div className="buttons-container">
         <button onClick={() => setTimeFrame(7884000)}>3 Months</button>
         <button onClick={() => setTimeFrame(15768000)}>6 Months</button>
         <button onClick={() => setTimeFrame(31536000)}>1 Year</button>
