@@ -7,7 +7,7 @@ const CandleStick = (props) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
-    function getCandleDataSeries(candleData) {
+    function getCandleDataSeries(candleData, symbol) {
       const len = candleData.t.length;
       let dataSeries = [];
       for (let i = 0; i < len; i++) {
@@ -21,10 +21,13 @@ const CandleStick = (props) => {
           ],
         });
       }
-      return dataSeries;
+      return {
+        name: symbol,
+        data: dataSeries,
+      };
     }
 
-    function getStockData(stock) {
+    async function getStockData(symbol) {
       const finnhub = require('finnhub');
       const api_key = finnhub.ApiClient.instance.authentications['api_key'];
       api_key.apiKey = process.env.REACT_APP_FINNHUB_API_KEY;
@@ -33,42 +36,51 @@ const CandleStick = (props) => {
       const currentDate = Math.floor(Date.now() / 1000);
       const pastTime = currentDate - timeFrame;
 
-      finnhubClient.stockCandles(
-        props.symbol1,
-        'D',
-        pastTime,
-        currentDate,
-        (error, data, response) => {
-          if (error) {
-            console.error(error);
-          } else {
-            console.log(data);
-            createCandleChart(data, stock);
-          }
-        },
-      );
+      return new Promise((resolve, reject) => {
+        finnhubClient.stockCandles(
+          symbol,
+          'D',
+          pastTime,
+          currentDate,
+          (error, data, response) => {
+            if (error) {
+              console.error(error);
+              reject(error);
+            } else {
+              console.log(data);
+              resolve(data);
+              // createCandleChart(data, stock);
+            }
+          },
+        );
+      });
     }
 
-    function createCandleChart(data, symbol) {
+    async function createCandleChart() {
       if (chartRef.current) {
         chartRef.current.destroy();
       }
 
-      const dataSeries = getCandleDataSeries(data);
-      console.log(`${props.symbol1} candlestick chart`, dataSeries);
+      let symbol1Data = await getStockData(props.symbol1);
+      let dataSeries = [getCandleDataSeries(symbol1Data, props.symbol1)];
+
+      let titleText = props.symbol1;
+      if (props.symbol2) {
+        let symbol2Data = await getStockData(props.symbol2);
+        dataSeries.push(getCandleDataSeries(symbol2Data, props.symbol2));
+        titleText = `${props.symbol1} vs ${props.symbol2}`;
+      }
+
+      console.log(`${titleText} data series:`, dataSeries);
 
       var options = {
-        series: [
-          {
-            data: dataSeries,
-          },
-        ],
+        series: dataSeries,
         chart: {
           type: 'candlestick',
           height: 350,
         },
         title: {
-          text: `${props.symbol1}`,
+          text: titleText,
           align: 'center',
         },
         xaxis: {
@@ -97,8 +109,10 @@ const CandleStick = (props) => {
       newChart.render();
       chartRef.current = newChart;
     }
-    getStockData(props.symbol1);
-  }, [props.symbol1, timeFrame]);
+
+    // getStockData(props.symbol1);
+    createCandleChart();
+  }, [props.symbol1, props.symbol2, timeFrame]);
 
   const chartID = `chart-${props.symbol1}`;
 
