@@ -95,7 +95,7 @@ const CandleStick = (props) => {
           },
           labels: {
             formatter: function (val) {
-              return val.toFixed(2);
+              return val !== undefined ? val.toFixed(2) : '';
             },
           },
         },
