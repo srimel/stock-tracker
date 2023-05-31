@@ -1,6 +1,6 @@
 import './App.css';
-import Header from './components/header/Header';
-import Home from './components/home/Home';
+import Header from '../components/header/Header';
+import Home from '../components/home/Home';
 import { Routes, Route } from 'react-router-dom';
 
 // The Header component will persist on all pages, so it will be placed in the App component.
