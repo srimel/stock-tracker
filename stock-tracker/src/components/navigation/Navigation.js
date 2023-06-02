@@ -14,7 +14,7 @@ function Navigation() {
       <Container>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto mx-auto">
-            <Nav.Link as={NavLink} to="/" exact>
+            <Nav.Link as={NavLink} to="/">
               <FontAwesomeIcon icon={faHouse} /> Home
             </Nav.Link>
             <Nav.Link as={NavLink} to="/comparison">
