@@ -6,7 +6,7 @@ import Navigation from '../navigation/Navigation';
 
 function Header() {
   return (
-    <div className="header">
+    <div className="header mb-5">
       {/* <StockTicker /> */}
       <div className="d-flex justify-content-center">
         <h1>Stock Tracker</h1>
