@@ -1,13 +1,15 @@
 import './App.css';
-import StockPrices from './StockPrices';
-
+import CandleStick from './components/chart/CandleStick';
 
 function App() {
   return (
     <div className="App">
-       <div>
-      <StockPrices />
-    </div>
+      <h1>Site Under Construction...</h1>
+      <div className="chart-container">
+        <CandleStick symbol1="AAPL" symbol2="GOOGL" />
+        <CandleStick symbol1="TSLA" />
+        <CandleStick symbol1="AMZN" />
+      </div>
     </div>
   );
 }
