@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ApexCharts from 'apexcharts';
+import ToggleButton from 'react-bootstrap/ToggleButton';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import './CandleStick.css';
 
 const CandleStick = (props) => {
@@ -49,7 +51,6 @@ const CandleStick = (props) => {
             } else {
               console.log(data);
               resolve(data);
-              // createCandleChart(data, stock);
             }
           },
         );
@@ -120,9 +121,29 @@ const CandleStick = (props) => {
     <div className="candlestick">
       <div id={chartID}></div>
       <div className="buttons-container">
-        <button onClick={() => setTimeFrame(7884000)}>3 Months</button>
-        <button onClick={() => setTimeFrame(15768000)}>6 Months</button>
-        <button onClick={() => setTimeFrame(31536000)}>1 Year</button>
+        <ToggleButtonGroup type="radio" name="time-frame">
+          <ToggleButton
+            variant={timeFrame === 7884000 ? 'primary' : 'secondary'}
+            value={7884000}
+            onClick={() => setTimeFrame(7884000)}
+          >
+            3 Months
+          </ToggleButton>
+          <ToggleButton
+            variant={timeFrame === 15768000 ? 'primary' : 'secondary'}
+            value={15768000}
+            onClick={() => setTimeFrame(15768000)}
+          >
+            6 Months
+          </ToggleButton>
+          <ToggleButton
+            variant={timeFrame === 31536000 ? 'primary' : 'secondary'}
+            value={31536000}
+            onClick={() => setTimeFrame(31536000)}
+          >
+            1 Year
+          </ToggleButton>
+        </ToggleButtonGroup>
       </div>
     </div>
   );
