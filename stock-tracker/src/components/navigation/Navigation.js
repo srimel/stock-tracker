@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 function Navigation() {
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light">
       <Container>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto mx-auto">

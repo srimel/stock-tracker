@@ -118,7 +118,7 @@ const CandleStick = (props) => {
   const chartID = `chart-${props.symbol1}`;
 
   return (
-    <div className="candlestick">
+    <div className="candlestick mb-5">
       <div id={chartID}></div>
       <div className="buttons-container">
         <ToggleButtonGroup type="radio" name="time-frame">
