@@ -5,6 +5,7 @@ import StockPrices from './StockPrices';
 function App() {
   return (
     <div className="App">
+      <div className="chart-container"></div>
       <StockPrices />
     </div>
     /*

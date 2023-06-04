@@ -11,8 +11,10 @@
 
 .search-bar input {
   padding: 10px;
+  justify-content: center;
 }
 
 .search-bar button {
   padding: 10px 20px;
+  justify-content: center;
 }
