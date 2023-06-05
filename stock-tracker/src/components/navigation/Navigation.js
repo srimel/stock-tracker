@@ -23,6 +23,9 @@ function Navigation() {
             <Nav.Link as={NavLink} to="/news">
               <FontAwesomeIcon icon={faNewspaper} /> News
             </Nav.Link>
+            <Nav.Link as={NavLink} to="/Details">
+              <FontAwesomeIcon icon={faChartLine} /> Profiles
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
