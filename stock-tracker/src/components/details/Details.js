@@ -6,6 +6,7 @@ const StockProfile = () => {
   const [companyProfile, setCompanyProfile] = useState(null);
   const [logoUrl, setLogoUrl] = useState('');
   const [finnhubIndustry, setFinnhubIndustry] = useState('');
+  const [ipoDate, setIpoDate] = useState('');
   const [loading, setLoading] = useState(false);
 
   const fetchStockProfile = async () => {
@@ -18,6 +19,7 @@ const StockProfile = () => {
       setCompanyProfile(data);
       setLogoUrl(data.logo);
       setFinnhubIndustry(data.finnhubIndustry);
+      setIpoDate(data.ipo);
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -57,6 +59,7 @@ const StockProfile = () => {
           <p>Country: {companyProfile.country}</p>
           <p>Website: {companyProfile.weburl}</p>
           <p>Industry: {finnhubIndustry}</p>
+          <p>IPO: {ipoDate}</p>
           <img src={logoUrl} alt="Company Logo" />
           </div>
           <CandleStick symbol1= {symbol} />
