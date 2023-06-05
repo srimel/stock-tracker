@@ -76,7 +76,7 @@ function News(props) {
         </Form>
 
         {news.length ? (
-          news.map((item, index) => (
+          news.slice(0, 20).map((item, index) => (
             <Card className="mb-4 w-50 mx-auto" key={index}>
               <Card.Img variant="top" src={item.image} />
               <Card.Body>
