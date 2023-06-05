@@ -79,7 +79,7 @@ function News(props) {
     <div className="news">
       <Container className="mt-0">
         <Form className="mb-4" onSubmit={handleSearchSubmit}>
-          <InputGroup className="w-25 mx-auto">
+          <InputGroup className="w-50 mx-auto">
             <Form.Control
               type="text"
               value={search}
