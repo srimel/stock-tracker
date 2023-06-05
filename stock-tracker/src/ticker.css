@@ -1,0 +1,46 @@
+.stock-ticker {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  min-width: 320px;
+  white-space: nowrap;
+  background-color: #333;
+  color: #fff;
+}
+
+.stock-item {
+  display: inline-block;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 10px;
+}
+
+.stock-symbol {
+  font-weight: bold;
+  font-size: 12px;
+  margin-right: 7px;
+}
+
+.stock-change-wrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.arrow {
+  font-size: 9px;
+  margin-right: 2px;
+}
+
+.stock-change-percent {
+  margin-right: 5px;
+}
+
+.stock-change {
+  color: green;
+}
+
+.stock-change.negative {
+  color: red;
+}
