@@ -8,8 +8,14 @@ import InputGroup from 'react-bootstrap/InputGroup';
 function News(props) {
   const [news, setNews] = useState([]);
   const [search, setSearch] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const fetchNews = async (symbol) => {
+    if (!symbol) {
+      setErrorMessage('Please enter a stock symbol.');
+      setNews([]);
+      return;
+    }
     const today = new Date();
     const monthAgo = new Date();
     monthAgo.setMonth(today.getMonth() - 1);
@@ -42,17 +48,26 @@ function News(props) {
     );
 
     if (!response.ok) {
+      setErrorMessage('Symbol not found. Please enter a valid stock symbol.');
+      setNews([]);
       console.error(`HTTP error! status: ${response.status}`);
       return;
     }
 
     const data = await response.json();
+    if (data.length === 0) {
+      setErrorMessage('Symbol not found. Please enter a valid stock symbol.');
+      setNews([]);
+      return;
+    }
     console.log('news', data);
+    setErrorMessage('');
     setNews(data);
   };
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
+    setErrorMessage('');
   };
 
   const handleSearchSubmit = (event) => {
@@ -64,7 +79,7 @@ function News(props) {
     <div className="news">
       <Container className="mt-0">
         <Form className="mb-4" onSubmit={handleSearchSubmit}>
-          <InputGroup className="w-25 mx-auto">
+          <InputGroup className="w-50 mx-auto">
             <Form.Control
               type="text"
               value={search}
@@ -74,6 +89,12 @@ function News(props) {
             <Button type="submit">Search</Button>
           </InputGroup>
         </Form>
+
+        {errorMessage && (
+          <div className="d-flex justify-content-center">
+            <p style={{ color: 'red' }}>{errorMessage}</p>
+          </div>
+        )}
 
         {news.length ? (
           news.slice(0, 20).map((item, index) => (
