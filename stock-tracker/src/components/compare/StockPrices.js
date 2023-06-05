@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import CandleStick from '../chart/CandleStick';
 
 const StockPrices = () => {
   const [symbol1, setSymbol1] = useState('');
@@ -122,6 +123,7 @@ const StockPrices = () => {
             <p>Sell: {recommendation1.sell}</p>
             <p>Hold: {recommendation1.hold}</p>
             <p>Period: {recommendation1.period}</p>
+            <CandleStick symbol1= {symbol1} />
             </div>
           )}
         </div>
@@ -146,6 +148,7 @@ const StockPrices = () => {
             <p>Sell: {recommendation2.sell}</p>
             <p>Hold: {recommendation2.hold}</p>
             <p>Period: {recommendation2.period}</p>
+            <CandleStick symbol1= {symbol2} />
             </div>
           )}
         </div>
