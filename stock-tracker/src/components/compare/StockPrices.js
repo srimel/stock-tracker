@@ -35,7 +35,7 @@ const StockPrices = () => {
       setErrorMessage('');
 
       const response1 = await fetch(
-        `https://finnhub.io/api/v1/quote?symbol=${symbol1}&token=chn4661r01qsjpubcga0chn4661r01qsjpubcgag`
+        `https://finnhub.io/api/v1/quote?symbol=${symbol1}&token=${process.env.REACT_APP_FINNHUB_API_KEY}`
       );
       const data1 = await response1.json();
       setCurrentPrice1(data1.c);
@@ -43,13 +43,13 @@ const StockPrices = () => {
       setPercentChange1(data1.dp);
 
       const companyResponse1 = await fetch(
-        `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol1}&token=chn4661r01qsjpubcga0chn4661r01qsjpubcgag`
+        `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol1}&token=${process.env.REACT_APP_FINNHUB_API_KEY}`
       );
       const companyData1 = await companyResponse1.json();
       setCompanyName1(companyData1.name);
 
       const response2 = await fetch(
-        `https://finnhub.io/api/v1/quote?symbol=${symbol2}&token=chn4661r01qsjpubcga0chn4661r01qsjpubcgag`
+        `https://finnhub.io/api/v1/quote?symbol=${symbol2}&token=${process.env.REACT_APP_FINNHUB_API_KEY}`
       );
       const data2 = await response2.json();
       setCurrentPrice2(data2.c);
@@ -57,19 +57,19 @@ const StockPrices = () => {
       setPercentChange2(data2.dp);
 
       const companyResponse2 = await fetch(
-        `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol2}&token=chn4661r01qsjpubcga0chn4661r01qsjpubcgag`
+        `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol2}&token=${process.env.REACT_APP_FINNHUB_API_KEY}`
       );
       const companyData2 = await companyResponse2.json();
       setCompanyName2(companyData2.name);
 
       const recommendationResponse1 = await fetch(
-        `https://finnhub.io/api/v1/stock/recommendation?symbol=${symbol1}&token=chn4661r01qsjpubcga0chn4661r01qsjpubcgag`
+        `https://finnhub.io/api/v1/stock/recommendation?symbol=${symbol1}&token=${process.env.REACT_APP_FINNHUB_API_KEY}`
       );
       const recommendationData1 = await recommendationResponse1.json();
       setRecommendation1(recommendationData1[0]);
 
       const recommendationResponse2 = await fetch(
-        `https://finnhub.io/api/v1/stock/recommendation?symbol=${symbol2}&token=chn4661r01qsjpubcga0chn4661r01qsjpubcgag`
+        `https://finnhub.io/api/v1/stock/recommendation?symbol=${symbol2}&token=${process.env.REACT_APP_FINNHUB_API_KEY}`
       );
       const recommendationData2 = await recommendationResponse2.json();
       setRecommendation2(recommendationData2[0]);
@@ -84,8 +84,10 @@ const StockPrices = () => {
 
   return (
     <div>
+      <div  className="d-flex justify-content-center" >
       <h1>Stock Comparison</h1>
-      <div>
+      </div>
+      <div className="d-flex justify-content-center">
         <input
           type="text"
           value={symbol1}
@@ -100,7 +102,9 @@ const StockPrices = () => {
         />
         <button onClick={fetchStockPrice}>COMPARE</button>
       </div>
+      <div className="d-flex justify-content-center">
       {errorMessage && <p>{errorMessage}</p>}
+      </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div
           style={{
