@@ -2,7 +2,6 @@
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   white-space: nowrap;
   background-color: #333;
   color: #fff;

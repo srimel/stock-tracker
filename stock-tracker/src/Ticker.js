@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import useWebSocket from 'react-use-websocket';
 import './ticker.css';
 
@@ -9,8 +9,8 @@ const Ticker = () => {
     [
       'AAPL', 'FB', 'AMZN', 'NFLX', 'GOOGL', 'MSFT', 'NVDA', 'TSLA', 'INTC',
       'AMD', 'IBM', 'CRM', 'ORCL', 'ADBE', 'PYPL', 'TWTR', 'SQ', 'CRM', 'SNAP',
-      'SHOP', 'UBER', 'ZM', 'DOCU', 'PTON', 'ROKU', 'NET', 'ROST', 'ATVI', 'EA',
-      'ADSK', 'TEAM', 'OKTA', 'ZS', 'WDAY', 'CRWD', 'NOW', 'TWLO', 'DDOG', 'MELI'
+      //'SHOP', 'UBER', 'ZM', 'DOCU', 'PTON', 'ROKU', 'NET', 'ROST', 'ATVI', 'EA',
+      //'ADSK', 'TEAM', 'OKTA', 'ZS', 'WDAY', 'CRWD', 'NOW', 'TWLO', 'DDOG', 'MELI'
     ]
       .map((symbol) => ({
         symbol,
@@ -19,6 +19,8 @@ const Ticker = () => {
         //changePercent: Number(),
       }))
   );
+  const tickerContainerRef = useRef(null);
+
   //  Configure socket for receiving stock data
   const { sendMessage, lastMessage } = useWebSocket(
     `wss://ws.finnhub.io?token=${process.env.REACT_APP_FINNHUB_API_KEY}`,
@@ -59,11 +61,29 @@ const Ticker = () => {
     }
   }, [lastMessage]);
 
+  useEffect(() => {
+    let animationFrameId;
+    const container = tickerContainerRef.current;
+
+    const scrollTick = () => {
+      container.scrollLeft += 1;
+
+      if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
+        container.scrollLeft = 0;
+      }
+      animationFrameId = requestAnimationFrame(scrollTick);
+    };
+
+    animationFrameId = requestAnimationFrame(scrollTick);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
+
   //  Render browser elements
   return (
     <div className="stock-ticker-container">
-      <div className="stock-ticker bg-dark text-light p-1">
-        {tickerData.map((stock, index) => (
+      <div ref={tickerContainerRef} className="stock-ticker bg-dark text-light p-1">
+        {tickerData.concat(tickerData).map((stock, index) => (
           <div key={index} className="stock-item d-inline-block">
             <span className="stock-symbol">{stock.symbol}</span>
             <span className="stock-price">{stock.price}</span>
