@@ -6,11 +6,19 @@
 }
 
 body {
-  background-color: var(--cyan);
+  background-color: gray;
 }
 
 h1 {
   text-align: center;
+}
+
+.donut-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 33.33%;
+  margin: 0 auto;
 }
 
 .donut-chart {

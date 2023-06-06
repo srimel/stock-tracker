@@ -1,12 +1,18 @@
-import React, { useEffect, useRef } from 'react';
-import Chart from 'chart.js';
-import 'Donut.css';
+import React, { useEffect, useRef, useMemo } from 'react';
+import { ArcElement, Chart, DoughnutController } from 'chart.js';
+import './Donut.css';
 
 const Donut = () => {
-  const donutChartRef = useRef(null);
+  const finnhub = require('finnhub');
+  const api_key = finnhub.ApiClient.instance.authentications['api_key'];
+  api_key.apiKey = process.env.REACT_APP_FINNHUB_API_KEY;
+  //const finnhubClient = new finnhub.DefaultApi();
 
-  useEffect(() => {
-    const backgroundColors = [
+  const donutChartRef = useRef(null);
+  const chartInstanceRef = useRef(null);
+
+  const backgroundColors = useMemo(
+    () => [
       'rgba(0, 123, 255, 0.8)',
       'rgba(255, 173, 51, 0.8)',
       'rgba(0, 216, 0, 0.8)',
@@ -18,9 +24,11 @@ const Donut = () => {
       'rgba(255, 0, 102, 0.8)',
       'rgba(255, 153, 0, 0.8)',
       'rgba(0, 204, 102, 0.8)',
-    ];
-
-    const borderColors = [
+    ],
+    []
+  );
+  const borderColors = useMemo(
+    () => [
       'rgba(0, 123, 255, 1)',
       'rgba(255, 173, 51, 1)',
       'rgba(0, 216, 0, 1)',
@@ -32,18 +40,26 @@ const Donut = () => {
       'rgba(255, 0, 102, 1)',
       'rgba(255, 153, 0, 1)',
       'rgba(0, 204, 102, 1)',
-    ];
+    ],
+    []
+  );
 
+  useEffect(() => {
     const renderChart = () => {
       const donutChart = donutChartRef.current;
 
-      new Chart(donutChart, {
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.destroy();
+      }
+      const labels = ['AAPL', 'AMZN', 'GOOGL', 'META', 'MSFT'];
+
+      chartInstanceRef.current = new Chart(donutChart, {
         type: 'doughnut',
         data: {
-          labels: ['AAPL', 'AMZN', 'GOOGL', 'META', 'MSFT'],
+          labels: labels,
           datasets: [
             {
-              label: 'My First Dataset',
+              label: 'Big Five Tech Stocks',
               data: [20, 12, 25, 11, 49],
               backgroundColor: backgroundColors,
               borderColor: borderColors,
@@ -51,11 +67,18 @@ const Donut = () => {
             },
           ],
         },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          aspectRatio: 1,
+        },
       });
     };
 
+    Chart.register(ArcElement, DoughnutController);
     renderChart();
-  }, []);
+
+  }, [backgroundColors, borderColors]);
 
   return (
     <canvas ref={donutChartRef} className="donut-chart" aria-label="donut chart" role="img"></canvas>
