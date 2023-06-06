@@ -73,7 +73,7 @@ const Home = () => {
         placeholder="Enter stock symbol"
       />
     
-      <button onClick={fetchMetrics}>Fetch Metrics</button>
+      <button type="button" className="btn btn-primary"onClick={fetchMetrics}>Fetch Metrics</button>
       {companyName && <h2>{companyName}</h2>}
         <p>10-Day Average Trading Volume: {metrics.volume}</p>
         <p>Asset Turnover (Annual): {metrics.assetTurnover}</p>
