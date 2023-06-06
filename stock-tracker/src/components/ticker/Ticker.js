@@ -24,7 +24,9 @@ const Ticker = () => {
     {
       onOpen: () => {
         tickerData.forEach((stock) => {
-          sendMessage(JSON.stringify({ type: 'subscribe', symbol: stock.symbol}));
+          sendMessage(JSON.stringify(
+            { type: 'subscribe', symbol: stock.symbol}
+          ));
         });
       },
       onMessage: (message) => {
@@ -32,10 +34,12 @@ const Ticker = () => {
         setTickerData((prevTickerData) => {
           return prevTickerData.map((stock) => {
             try {
-              const match = messageData.data.find((trade) => trade.s === stock.symbol);
+              const match = messageData.data.find(
+                (trade) => trade.s === stock.symbol);
               if (match) {
                 const diff = match.p - stock.price;
-                const changePercent = stock.price !== 0 ? (diff / stock.price * 100).toFixed(2) : 0;
+                const changePercent = stock.price !== 0 ?
+                  (diff / stock.price * 100).toFixed(2) : 0;
                 return {
                   ...stock,
                   price: Number(match.p).toFixed(2),
@@ -61,6 +65,7 @@ const Ticker = () => {
   useEffect(() => {
     let animationFrameId;
     const container = tickerContainerRef.current;
+
     const scrollTick = () => {
       container.scrollLeft += 1;
       if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
@@ -68,6 +73,7 @@ const Ticker = () => {
       }
       animationFrameId = requestAnimationFrame(scrollTick);
     };
+
     animationFrameId = requestAnimationFrame(scrollTick);
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
@@ -75,19 +81,23 @@ const Ticker = () => {
   //  Render browser elements
   return (
     <div className="stock-ticker-container">
-      <div ref={tickerContainerRef} className="stock-ticker bg-dark text-light p-1">
+      <div ref={tickerContainerRef}
+        className="stock-ticker bg-dark text-light p-1">
         {tickerData.map((stock, index) => (
-          <div key={index} className="stock-item d-inline-block">
+          <div key={index}
+               className="stock-item d-inline-block">
             <span className="stock-symbol">
               {stock.symbol}
-              </span>
+            </span>
             <span className="stock-price">
               {stock.price}
-              </span>
+            </span>
             <div className="stock-change-wrapper d-flex justify-content-center">
-              <div className={`stock-change ${stock.change < 0 ? 'negative' : stock.change > 0 ? 'positive' : ''}`}>
+              <div className={`stock-change ${stock.change < 0 ? 'negative' :
+                               stock.change > 0 ? 'positive' : ''}`}>
                 <span className={`arrow ${stock.change < 0 ? 'negative' : ''}`}>
-                  {stock.change < 0 ? '\u25BC' : stock.change > 0 ? '\u25B2' : ''}
+                  {stock.change < 0 ? '\u25BC' :
+                   stock.change > 0 ? '\u25B2' : ''}
                 </span>
                 <span className="stock-change-percent">
                   {stock.changePercent}
