@@ -2,27 +2,24 @@ import React, { useEffect, useState, useRef } from 'react';
 import useWebSocket from 'react-use-websocket';
 import './ticker.css';
 
-//  TODO: update on-screen numbers beyond zero value
-
 const Ticker = () => {
+  const tickerContainerRef = useRef(null);
   const [tickerData, setTickerData] = useState(
     [
       'AAPL', 'FB', 'AMZN', 'NFLX', 'GOOGL', 'MSFT', 'NVDA', 'TSLA', 'INTC',
       'AMD', 'IBM', 'CRM', 'ORCL', 'ADBE', 'PYPL', 'TWTR', 'SQ', 'CRM', 'SNAP',
-      //'SHOP', 'UBER', 'ZM', 'DOCU', 'PTON', 'ROKU', 'NET', 'ROST', 'ATVI', 'EA',
-      //'ADSK', 'TEAM', 'OKTA', 'ZS', 'WDAY', 'CRWD', 'NOW', 'TWLO', 'DDOG', 'MELI'
+      'SHOP', 'UBER', 'ZM', 'DOCU', 'PTON', 'ROKU', 'NET', 'ROST', 'ATVI', 'EA',
+      'ADSK', 'TEAM', 'OKTA', 'ZS', 'WDAY', 'CRWD', 'NOW', 'TWLO', 'DDOG', 'MELI'
     ]
       .map((symbol) => ({
         symbol,
-        price: 0,
-        //change: Number(),
-        //changePercent: Number(),
+        price: "000.00",
+        change: "0.00",
+        changePercent: "0.00",
       }))
   );
-  const tickerContainerRef = useRef(null);
-
   //  Configure socket for receiving stock data
-  const { sendMessage, lastMessage } = useWebSocket(
+  const { sendMessage } = useWebSocket(
     `wss://ws.finnhub.io?token=${process.env.REACT_APP_FINNHUB_API_KEY}`,
     {
       onOpen: () => {
@@ -31,17 +28,23 @@ const Ticker = () => {
         });
       },
       onMessage: (message) => {
-        console.log('Message:', message);
         const messageData = JSON.parse(message.data);
         setTickerData((prevTickerData) => {
           return prevTickerData.map((stock) => {
-            if (stock.symbol === messageData.s) {
-              return {
-                ...stock,
-                price: Number(messageData.p).toFixed(2),
-                //change: Number((messageData.p - stock.price).toFixed(2)),
-                //changePercent: Number(`${((messageData.p - stock.price) / stock.price * 100).toFixed(2)}%`),
-              };
+            try {
+              const match = messageData.data.find((trade) => trade.s === stock.symbol);
+              if (match) {
+                const diff = match.p - stock.price;
+                const changePercent = stock.price !== 0 ? (diff / stock.price * 100).toFixed(2) : 0;
+                return {
+                  ...stock,
+                  price: Number(match.p).toFixed(2),
+                  change: Number(diff).toFixed(2),
+                  changePercent: `${changePercent}%`,
+                };
+              }
+            } catch (error) {
+              // don't care
             }
             return stock;
           });
@@ -54,28 +57,18 @@ const Ticker = () => {
     }
   );
 
-  //  Update ticker data whenever a new message arrives
-  useEffect(() => {
-    if (lastMessage !== null) {
-      console.log('Message:', lastMessage);
-    }
-  }, [lastMessage]);
-
+  //  Scroll ticker items to the left and repeat once end is reached
   useEffect(() => {
     let animationFrameId;
     const container = tickerContainerRef.current;
-
     const scrollTick = () => {
       container.scrollLeft += 1;
-
       if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
-        container.scrollLeft = 0;
+        container.scrollLeft = 600; // this should probably be relative
       }
       animationFrameId = requestAnimationFrame(scrollTick);
     };
-
     animationFrameId = requestAnimationFrame(scrollTick);
-
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
@@ -83,17 +76,25 @@ const Ticker = () => {
   return (
     <div className="stock-ticker-container">
       <div ref={tickerContainerRef} className="stock-ticker bg-dark text-light p-1">
-        {tickerData.concat(tickerData).map((stock, index) => (
+        {tickerData.map((stock, index) => (
           <div key={index} className="stock-item d-inline-block">
-            <span className="stock-symbol">{stock.symbol}</span>
-            <span className="stock-price">{stock.price}</span>
+            <span className="stock-symbol">
+              {stock.symbol}
+              </span>
+            <span className="stock-price">
+              {stock.price}
+              </span>
             <div className="stock-change-wrapper d-flex justify-content-center">
-              <div className={`stock-change ${stock.change < 0 ? 'negative' : ''}`}>
+              <div className={`stock-change ${stock.change < 0 ? 'negative' : stock.change > 0 ? 'positive' : ''}`}>
                 <span className={`arrow ${stock.change < 0 ? 'negative' : ''}`}>
-                  {stock.change < 0 ? '\u25BC' : '\u25B2'}
+                  {stock.change < 0 ? '\u25BC' : stock.change > 0 ? '\u25B2' : ''}
                 </span>
-                <span className="stock-change-percent">{stock.changePercent}%</span>
-                ({stock.change})
+                <span className="stock-change-percent">
+                  {stock.changePercent}
+                </span>
+                <span className="stock-change">
+                  ({stock.change === 0 ? "0.00" : stock.change})
+                </span>
               </div>
             </div>
           </div>
