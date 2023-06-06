@@ -21,13 +21,14 @@ const StockPrices = () => {
   const [percentChange1, setPercentChange1] = useState(null);
   const [percentChange2, setPercentChange2] = useState(null);
   const [search1, setSearch1] = useState('');
+  const [search2, setSearch2] = useState('');
 
   const handleSymbolChange = (event, symbolNumber) => {
     const symbol = event.target.value;
     if (symbolNumber === 1) {
-      setSymbol1(symbol);
+      setSearch1(symbol);
     } else if (symbolNumber === 2) {
-      setSymbol2(symbol);
+      setSearch2(symbol);
     }
   };
 
@@ -39,12 +40,25 @@ const StockPrices = () => {
 
     try {
       setErrorMessage('');
+      const validateSymbols = async (symbol) => {
+        const response = await fetch(
+          `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.REACT_APP_FINNHUB_API_KEY}`
+        );
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(`Invalid stock symbol: ${symbol}`);
+        }
+      };
+  
+      await Promise.all([validateSymbols(symbol1), validateSymbols(symbol2)]);
 
       const response1 = await fetch(
         `https://finnhub.io/api/v1/quote?symbol=${symbol1}&token=${process.env.REACT_APP_FINNHUB_API_KEY}`
       );
+     
       const data1 = await response1.json();
       setCurrentPrice1(data1.c);
+      console.log(currentPrice1);
       setChange1(data1.d);
       setPercentChange1(data1.dp);
 
@@ -90,13 +104,21 @@ const StockPrices = () => {
     setErrorMessage('');
   };
   const handleSearchSubmit = (event) => {
+    if(search1 == ''){
+    setCurrentPrice1('');
+    }
+    if(search2 == ''){
+    setCurrentPrice2('');
+    }
+    setSymbol1(search1);
+    setSymbol2(search2);
     event.preventDefault();
-    fetchStockPrice();
+   
   };
 
   useEffect(() => {
     fetchStockPrice();
-  }, []);
+  }, [symbol1, symbol2]);
 
   return (
     <div>
@@ -108,13 +130,13 @@ const StockPrices = () => {
         <InputGroup className="d-flex justify-content-center">
           <Form.Control
             type="text"
-            value={symbol1}
+            value={search1}
             onChange={(event) => handleSymbolChange(event, 1)}
             placeholder="Enter stock symbol 1"
           />
           <Form.Control
             type="text"
-            value={symbol2}
+            value={search2}
             onChange={(event) => handleSymbolChange(event, 2)}
             placeholder="Enter stock symbol 2"
           />
@@ -188,3 +210,81 @@ const StockPrices = () => {
 };
 
 export default StockPrices;
+
+/*
+<div>
+      <Container className="mt-0">
+      <Form className="mb-4" onSubmit={handleSearchSubmit}>
+      <div  className="d-flex justify-content-center" >
+      <h1>Stock Comparison</h1>
+      </div>
+      <InputGroup className="d-flex justify-content-center">
+        <Form.Control
+          type="text"
+          value={symbol1}
+          onChange={(event) => handleSymbolChange(event, 1)}
+          placeholder="Enter stock symbol 1"
+        />
+        <Form.Control
+          type="text"
+          value={symbol2}
+          onChange={(event) => handleSymbolChange(event, 2)}
+          placeholder="Enter stock symbol 2"
+        />
+        <Button type="submit">COMPARE</Button> 
+      </InputGroup>
+      </Form>
+      
+
+      
+    <div className="d-flex justify-content-between">
+      <div className="mx-auto mt-4">
+        {currentPrice1 && (
+          <Card bg="light" border="primary" className = "w-30">
+            <Card.Body>
+              <Card.Title>{companyName1}</Card.Title>
+              <Card.Text>
+                Symbol: {symbol1}<br/>
+                Current Share Price: {currentPrice1}<br/>
+                Change: {change1}<br/>
+                Percent Change: {percentChange1}<br/>
+                <h5>Recommended Trends</h5>
+                Buy: {recommendation1.buy}<br/>
+                Sell: {recommendation1.sell}<br/>
+                Hold: {recommendation1.hold}<br/>
+                Period: {recommendation1.period}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        )}
+        
+        <CandleStick symbol1= {symbol1} />
+      </div>
+      <div className ="mx-auto mt-4">
+        {currentPrice2 && (
+          <Card bg="light" border="success" className = "w-30">
+            <Card.Body>
+              <Card.Title>{companyName2}</Card.Title>
+              <Card.Text>
+                Symbol: {symbol2}<br/>
+                Current Share Price: {currentPrice2}<br/>
+                Change: {change2}<br/>
+                Percent Change: {percentChange2}<br/>
+                <h5>Recommended Trends</h5>
+                Buy: {recommendation2.buy}<br/>
+                Sell: {recommendation2.sell}<br/>
+                Hold: {recommendation2.hold}<br/>
+                Period: {recommendation2.period}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        )}
+        <CandleStick symbol1= {symbol2} />
+      </div>
+    </div>
+    </Container>
+  </div>
+);
+};
+
+*/
