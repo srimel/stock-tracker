@@ -20,7 +20,7 @@ const Home = () => {
   const fetchMetrics = async () => {
     try {
       const response = await fetch(
-        `https://finnhub.io/api/v1/stock/metric?symbol=${symbol}&metric=all&token=chn4661r01qsjpubcga0chn4661r01qsjpubcgag`
+        `https://finnhub.io/api/v1/stock/metric?symbol=${symbol}&metric=all&token=${process.env.REACT_APP_FINNHUB_API_KEY}`
       );
       const data = await response.json();
 
@@ -49,7 +49,7 @@ const Home = () => {
         console.error('No metrics found for the given stock symbol.');
       }
       const profileResponse = await fetch(
-        `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=chn4661r01qsjpubcga0chn4661r01qsjpubcgag`
+        `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${process.env.REACT_APP_FINNHUB_API_KEY}`
       );
       const profileData = await profileResponse.json();
 
@@ -65,24 +65,26 @@ const Home = () => {
 
   return (
     <div>
-      <input
+      <div className = "text-center">
+      <input 
         type="text"
         value={symbol}
         onChange={handleChange}
         placeholder="Enter stock symbol"
       />
+    
       <button onClick={fetchMetrics}>Fetch Metrics</button>
       {companyName && <h2>{companyName}</h2>}
-      <ul>
-        <li>10-Day Average Trading Volume: {metrics.volume}</li>
-        <li>Asset Turnover (Annual): {metrics.assetTurnover}</li>
-        <li>Book Value per Share (Quarterly): {metrics.bookValue}</li>
-        <li>Cash Flow per Share (Annual): {metrics.cashFlow}</li>
-        <li>Gross Margin (Annual): {metrics.grossMargin}</li>
-        <li>Net Profit Margin (Annual): {metrics.profitMargin}</li>
-        <li>Revenue per Share (Annual): {metrics.revenuePerShare}</li>
-      </ul>
-      <CandleStick symbol1={symbol} />
+        <p>10-Day Average Trading Volume: {metrics.volume}</p>
+        <p>Asset Turnover (Annual): {metrics.assetTurnover}</p>
+        <p>Book Value per Share (Quarterly): {metrics.bookValue}</p>
+        <p>Cash Flow per Share (Annual): {metrics.cashFlow}</p>
+        <p>Gross Margin (Annual): {metrics.grossMargin}</p>
+        <p>Net Profit Margin (Annual): {metrics.profitMargin}</p>
+        <p>Revenue per Share (Annual): {metrics.revenuePerShare}</p>
+      {symbol && <div className = "d-flex justify-content-center"><CandleStick symbol1 ={symbol}/> </div> }
+      </div>
+      
     </div>
   );
 };
