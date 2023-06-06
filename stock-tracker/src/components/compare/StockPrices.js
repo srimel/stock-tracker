@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CandleStick from '../chart/CandleStick';
+import Card from 'react-bootstrap/Card';
 
 const StockPrices = () => {
   const [symbol1, setSymbol1] = useState('');
@@ -102,63 +103,55 @@ const StockPrices = () => {
         />
         <button onClick={fetchStockPrice}>COMPARE</button>
       </div>
-      <div className="d-flex justify-content-center">
-      {errorMessage && <p>{errorMessage}</p>}
+
+      
+    <div className="d-flex justify-content-between">
+      <div className="mx-auto mt-4">
+        {currentPrice1 && (
+          <Card bg="light" border="primary" className = "w-30">
+            <Card.Body>
+              <Card.Title>{companyName1}</Card.Title>
+              <Card.Text>
+                Symbol: {symbol1}<br/>
+                Current Share Price: {currentPrice1}<br/>
+                Change: {change1}<br/>
+                Percent Change: {percentChange1}<br/>
+                <h5>Recommended Trends</h5>
+                Buy: {recommendation1.buy}<br/>
+                Sell: {recommendation1.sell}<br/>
+                Hold: {recommendation1.hold}<br/>
+                Period: {recommendation1.period}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+         
+        )}
+        <CandleStick symbol1= {symbol1} />
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div
-          style={{
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            marginTop: '40px',
-            border: '1px solid black',
-            backgroundColor: 'lightblue',
-          }}
-        >
-          {currentPrice1 && (
-            <div>
-              <h2 style={{ marginLeft: '5px', marginRight: '5px' }}>{companyName1}</h2>
-              <p>Symbol: {symbol1}</p>
-              <p>Current Share Price: {currentPrice1}</p>
-              <p>Change: {change1}</p>
-              <p>Percent Change: {percentChange1}</p>
-              <h2 style = {{marginRight: '5px', marginLeft:'5px'}}>Recommended Trends</h2>
-              <p>Buy: {recommendation1.buy}</p>
-            <p>Sell: {recommendation1.sell}</p>
-            <p>Hold: {recommendation1.hold}</p>
-            <p>Period: {recommendation1.period}</p>
-            <CandleStick symbol1= {symbol1} />
-            </div>
-          )}
-        </div>
-        <div
-          style={{
-            marginRight: 'auto',
-            marginLeft:'auto',
-            marginTop: '40px',
-            border: '1px solid black',
-            backgroundColor: 'lightgreen',
-          }}
-        >
-          {currentPrice2 && (
-            <div>
-              <h2 style={{ marginLeft: '5px', marginRight: '5px' }}>{companyName2}</h2>
-              <p>Symbol: {symbol2}</p>
-              <p>Current Share Price: {currentPrice2}</p>
-              <p>Change: {change2}</p>
-              <p>Percent Change: {percentChange2}</p>
-              <h2 style = {{marginRight: '5px', marginLeft:'5px'}}>Recommended Trends</h2>
-              <p>Buy: {recommendation2.buy}</p>
-            <p>Sell: {recommendation2.sell}</p>
-            <p>Hold: {recommendation2.hold}</p>
-            <p>Period: {recommendation2.period}</p>
-            <CandleStick symbol1= {symbol2} />
-            </div>
-          )}
-        </div>
+      <div className ="mx-auto mt-4">
+        {currentPrice2 && (
+          <Card bg="light" border="success" className = "w-30">
+            <Card.Body>
+              <Card.Title>{companyName2}</Card.Title>
+              <Card.Text>
+                Symbol: {symbol2}<br/>
+                Current Share Price: {currentPrice2}<br/>
+                Change: {change2}<br/>
+                Percent Change: {percentChange2}<br/>
+                <h5>Recommended Trends</h5>
+                Buy: {recommendation2.buy}<br/>
+                Sell: {recommendation2.sell}<br/>
+                Hold: {recommendation2.hold}<br/>
+                Period: {recommendation2.period}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        )}
+        <CandleStick symbol1= {symbol2} />
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default StockPrices;
