@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useMemo } from 'react';
-import { ArcElement, Chart, DoughnutController } from 'chart.js';
+import { ArcElement, Chart, DoughnutController, Legend, Title } from 'chart.js';
 import './Donut.css';
 
 const Donut = () => {
@@ -51,7 +51,7 @@ const Donut = () => {
       if (chartInstanceRef.current) {
         chartInstanceRef.current.destroy();
       }
-      const labels = ['AAPL', 'AMZN', 'GOOGL', 'META', 'MSFT'];
+      const labels = ['AAPL', 'AMZN', 'GOOGL', 'META', 'MSFT', 'OTHER'];
 
       chartInstanceRef.current = new Chart(donutChart, {
         type: 'doughnut',
@@ -59,8 +59,8 @@ const Donut = () => {
           labels: labels,
           datasets: [
             {
-              label: 'Big Five Tech Stocks',
-              data: [20, 12, 25, 11, 49],
+              label: 'Big Five vs The World',
+              data: [20, 12, 25, 11, 33, 16],
               backgroundColor: backgroundColors,
               borderColor: borderColors,
               borderWidth: 1,
@@ -71,17 +71,42 @@ const Donut = () => {
           responsive: true,
           maintainAspectRatio: true,
           aspectRatio: 1,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Big Five vs The World',
+              font: {
+                size: 24,
+                weight: 'bold',
+              },
+            },
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: {
+                usePointStyle: true,
+                padding: 18,
+              },
+            },
+          },
         },
       });
     };
 
-    Chart.register(ArcElement, DoughnutController);
+    Chart.register(ArcElement, DoughnutController, Legend, Title);
     renderChart();
 
   }, [backgroundColors, borderColors]);
 
   return (
-    <canvas ref={donutChartRef} className="donut-chart" aria-label="donut chart" role="img"></canvas>
+    <div className="donut-chart-container">
+      <canvas
+        ref={donutChartRef}
+        className="donut-chart"
+        aria-label="donut chart"
+        role="img">
+      </canvas>
+    </div>
   );
 };
 

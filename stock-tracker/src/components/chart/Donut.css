@@ -17,12 +17,16 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 33.33%;
+  width: 50%;
   margin: 0 auto;
 }
 
 .donut-chart {
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 0.8rem;
   background-color: var(--white);
+}
+
+.chart-legend {
+  padding-bottom: 20px;
 }
