@@ -2,6 +2,7 @@ import './App.css';
 import Header from '../components/header/Header';
 import Home from '../components/home/Home';
 import Compare from '../components/compare/StockPrices';
+import News from '../components/news/News';
 import { Routes, Route } from 'react-router-dom';
 
 // The Header component will persist on all pages, so it will be placed in the App component.
@@ -14,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/compare" element={<Compare />} />
-        <Route path="/news" element={<h1>News</h1>} />
+        <Route path="/news" element={<News />} />
       </Routes>
     </div>
   );

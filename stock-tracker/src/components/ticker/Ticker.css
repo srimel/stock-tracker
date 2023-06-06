@@ -1,0 +1,65 @@
+.stock-ticker {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: hidden;
+  white-space: nowrap;
+  background-color: #333;
+  color: #fff;
+}
+
+/* Hide the scrollbar for non-touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .stock-ticker {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+}
+
+/* Hide the scrollbar for WebKit browsers */
+.stock-ticker::-webkit-scrollbar {
+  display: none;
+}
+
+.stock-item {
+  display: inline-block;
+  align-items: center;
+  width: 100px;
+  padding: 0 10px;
+  font-size: 10px;
+}
+
+.stock-symbol {
+  font-weight: bold;
+  font-size: 12px;
+  margin-right: 7px;
+}
+
+/* Handle changePercent and change together */
+.stock-change-wrapper {
+  display: flex;
+  width: 80px;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.arrow {
+  font-size: 9px;
+  margin-right: 2px;
+}
+
+.stock-change-percent {
+  margin-right: 5px;
+  width: 10px;
+}
+
+.stock-change.positive {
+  color: green;
+}
+
+.stock-change.negative {
+  color: red;
+}
+
+.stock-change.zero {
+  color: white;
+}
