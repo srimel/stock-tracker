@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import CandleStick from '../chart/CandleStick';
 import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 const StockPrices = () => {
   const [symbol1, setSymbol1] = useState('');
@@ -16,6 +20,7 @@ const StockPrices = () => {
   const [recommendation2, setRecommendation2] = useState({});
   const [percentChange1, setPercentChange1] = useState(null);
   const [percentChange2, setPercentChange2] = useState(null);
+  const [search1, setSearch1] = useState('');
 
   const handleSymbolChange = (event, symbolNumber) => {
     const symbol = event.target.value;
@@ -46,6 +51,7 @@ const StockPrices = () => {
       const companyResponse1 = await fetch(
         `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol1}&token=${process.env.REACT_APP_FINNHUB_API_KEY}`
       );
+     
       const companyData1 = await companyResponse1.json();
       setCompanyName1(companyData1.name);
 
@@ -79,30 +85,43 @@ const StockPrices = () => {
     }
   };
 
+  const handleSearchChange = (event) => {
+    setSearch1(event.target.value);
+    setErrorMessage('');
+  };
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    fetchStockPrice();
+  };
+
   useEffect(() => {
     fetchStockPrice();
   }, []);
 
   return (
     <div>
+      <Container className="mt-0">
+      <Form className="mb-4" onSubmit={handleSearchSubmit}>
       <div  className="d-flex justify-content-center" >
       <h1>Stock Comparison</h1>
       </div>
-      <div className="d-flex justify-content-center">
-        <input
+      <InputGroup className="d-flex justify-content-center">
+        <Form.Control
           type="text"
           value={symbol1}
           onChange={(event) => handleSymbolChange(event, 1)}
           placeholder="Enter stock symbol 1"
         />
-        <input
+        <Form.Control
           type="text"
           value={symbol2}
           onChange={(event) => handleSymbolChange(event, 2)}
           placeholder="Enter stock symbol 2"
         />
-        <button onClick={fetchStockPrice}>COMPARE</button>
-      </div>
+        <Button type="submit">COMPARE</Button> 
+      </InputGroup>
+      </Form>
+      
 
       
     <div className="d-flex justify-content-between">
@@ -124,8 +143,8 @@ const StockPrices = () => {
               </Card.Text>
             </Card.Body>
           </Card>
-         
         )}
+        
         <CandleStick symbol1= {symbol1} />
       </div>
       <div className ="mx-auto mt-4">
@@ -150,6 +169,7 @@ const StockPrices = () => {
         <CandleStick symbol1= {symbol2} />
       </div>
     </div>
+    </Container>
   </div>
 );
 };
