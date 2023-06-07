@@ -19,17 +19,11 @@ function Home() {
   useEffect(() => {
     const fetchData = async () => {
       const marketCaps = await fetchMarketCaps(bigFive);
+      const news = await fetchNews(bigFive);
+      setNewsData(news);
       setMarketCaps(marketCaps);
     };
     fetchData();
-  }, [bigFive]);
-
-  useEffect(() => {
-    const fetchNewsData = async () => {
-      const news = await fetchNews(bigFive);
-      setNewsData(news);
-    };
-    fetchNewsData();
   }, [bigFive]);
 
   return (
