@@ -11,24 +11,12 @@
   color: #fff;
 }
 
-/* Hide the scrollbar for non-touch devices */
-@media (hover: none) and (pointer: coarse) {
-  .stock-ticker {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-  }
-}
-
-/* Hide the scrollbar for WebKit browsers */
-.stock-ticker::-webkit-scrollbar {
-  display: none;
-}
-
 .stock-item {
   display: inline-block;
-  width: 100px;
+  min-width: 100px;
   padding: 0 10px;
   font-size: 10px;
+  text-align: center;
 }
 
 .stock-symbol {
@@ -40,7 +28,8 @@
 /* Handle changePercent and change together */
 .stock-change-wrapper {
   display: flex;
-  width: 64px;
+  flex-grow: 1;
+  width: 100%;
   align-items: center;
   margin-top: 1px;
   justify-content: center;
@@ -54,7 +43,7 @@
 
 .stock-change-percent {
   margin-right: 5px;
-  width: 10px;
+  width: 100%;
 }
 
 .stock-change.positive {
