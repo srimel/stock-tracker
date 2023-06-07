@@ -17,7 +17,7 @@ function Navigation() {
             <Nav.Link as={NavLink} to="/">
               <FontAwesomeIcon icon={faHouse} /> Home
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/comparison">
+            <Nav.Link as={NavLink} to="/Compare">
               <FontAwesomeIcon icon={faChartLine} /> Comparison
             </Nav.Link>
             <Nav.Link as={NavLink} to="/news">
