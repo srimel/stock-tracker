@@ -29,8 +29,13 @@ function Details() {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    setSymbol(search);
-    setShow(true);
+    if (search.trim() === '') {
+      setErrorMessage('Please enter a valid stock symbol.');
+    } else {
+      setSymbol(search);
+      setErrorMessage('');
+      setShow(true);
+    }
   };
 
   useEffect(() => {
