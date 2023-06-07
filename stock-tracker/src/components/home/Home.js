@@ -32,8 +32,11 @@ function Home() {
       {<Details />}
       {<div className="chart-container">
         <CandleStick symbol1="AAPL" />
-        <CandleStick symbol1="TSLA" />
         <CandleStick symbol1="AMZN" />
+        <CandleStick symbol1="GOOGL" />
+        <CandleStick symbol1="META" />
+        <CandleStick symbol1="MSFT" />
+
       </div>}
       {<div className='donut-container'>
         <Donut title={"Market Cap"} labels={bigFive} dataset={marketCaps}/>
