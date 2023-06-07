@@ -1,0 +1,22 @@
+h1 {
+  text-align: center;
+}
+
+.donut-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  margin: 0 auto;
+  padding-bottom: 10px;
+}
+
+.donut-chart {
+  padding: 1rem;
+  border-radius: 0.8rem;
+  background-color: #ffffff;
+}
+
+.chart-legend {
+  padding-bottom: 20px;
+}
