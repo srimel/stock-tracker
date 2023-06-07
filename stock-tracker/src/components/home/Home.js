@@ -3,7 +3,6 @@ import './Home.css';
 import CandleStick from '../chart/CandleStick';
 import Details from '../details/Details';
 import Donut from '../chart/Donut';
-import '../chart/Donut.css';
 
 // Per wireframe:
 // Home page will contain a search input for bringing up the stock details modal.
@@ -67,14 +66,13 @@ async function fetchMarketCaps(symbols) {
               console.error(error);
               reject(error);
             } else {
-              resolve(data['marketCapitalization']);
+              resolve(parseInt(data['marketCapitalization']));
             }
           });
         });
       })
     );
 
-    // Process the marketCaps array
     marketCaps.forEach((marketCap, index) => {
       console.log(`${symbols[index]} market cap: ${parseInt(marketCap)}`);
     });
