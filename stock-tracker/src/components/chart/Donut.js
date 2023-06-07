@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useMemo } from 'react';
 import { ArcElement, Chart, DoughnutController, Legend, Title } from 'chart.js';
 import './Donut.css';
 
-const Donut = () => {
+//const totalTechMarketCap = 21852000;
+
+const Donut = ({title, labels, dataset}) => {
   const donutChartRef = useRef(null);
   const chartInstanceRef = useRef(null);
 
@@ -47,19 +49,14 @@ const Donut = () => {
         chartInstanceRef.current.destroy();
       }
 
-      const labels = ['AAPL', 'AMZN', 'GOOGL', 'META', 'MSFT'];
-      const marketCaps = await fetchMarketCaps(labels);
-      labels.push('OTHER');
-      marketCaps.push(2185200);
-
       chartInstanceRef.current = new Chart(donutChart, {
         type: 'doughnut',
         data: {
           labels: labels,
           datasets: [
             {
-              label: 'Big Five vs The World',
-              data: marketCaps,
+              label: title,
+              data: dataset,
               backgroundColor: backgroundColors,
               borderColor: borderColors,
               borderWidth: 1,
@@ -73,7 +70,7 @@ const Donut = () => {
           plugins: {
             title: {
               display: true,
-              text: 'Big Five vs The World',
+              text: title,
               font: {
                 size: 24,
                 weight: 'bold',
@@ -84,7 +81,7 @@ const Donut = () => {
               position: 'bottom',
               labels: {
                 usePointStyle: true,
-                padding: 18,
+                padding: 30,
               },
             },
           },
@@ -95,7 +92,7 @@ const Donut = () => {
     Chart.register(ArcElement, DoughnutController, Legend, Title);
     renderChart();
 
-  }, [backgroundColors, borderColors]);
+  }, [title, labels, dataset, backgroundColors, borderColors]);
 
   return (
     <div className="donut-chart-container">
@@ -110,35 +107,3 @@ const Donut = () => {
 };
 
 export default Donut;
-
-async function fetchMarketCaps(symbols) {
-  try {
-    const finnhub = require('finnhub');
-    const api_key = finnhub.ApiClient.instance.authentications['api_key'];
-    api_key.apiKey = process.env.REACT_APP_FINNHUB_API_KEY;
-    const finnhubClient = new finnhub.DefaultApi();
-
-    const marketCaps = await Promise.all(
-      symbols.map((symbol) => {
-        return new Promise((resolve, reject) => {
-          finnhubClient.companyProfile2({ symbol }, (error, data) => {
-            if (error) {
-              console.error(error);
-              reject(error);
-            } else {
-              resolve(data['marketCapitalization']);
-            }
-          });
-        });
-      })
-    );
-
-    // Process the marketCaps array
-    marketCaps.forEach((marketCap, index) => {
-      console.log(`${symbols[index]} market cap: ${parseInt(marketCap)}`);
-    });
-    return marketCaps;
-  } catch (error) {
-    console.error(error);
-  }
-}
