@@ -7,6 +7,7 @@ import Donut from '../chart/Donut';
 function Home() {
   const [marketCaps, setMarketCaps] = useState([]);
   const [newsData, setNewsData] = useState([]);
+  const [openPrices, setopenPrices] = useState([]);
   const bigFive = useMemo(
     () => ['AAPL', 'AMZN', 'GOOGL', 'META', 'MSFT'], []
   );
@@ -14,11 +15,11 @@ function Home() {
   useEffect(() => {
     const fetchData = async () => {
       const marketCaps = await fetchMarketCaps(bigFive);
-      const news = await fetchNews(bigFive);
+      const openPrices = await fetchOpenPrices(bigFive);
       setMarketCaps(marketCaps);
-      setNewsData(news);
+      setopenPrices(openPrices);
     };
-    fetchData();
+    fetchData()
   }, [bigFive]);
 
   return (
@@ -26,13 +27,16 @@ function Home() {
       {<Details />}
       {<div className="chart-container">
         <CandleStick symbol1="AAPL" />
-        <CandleStick symbol1="TSLA" />
         <CandleStick symbol1="AMZN" />
+        <CandleStick symbol1="GOOGL" />
+        <CandleStick symbol1="META" />
+        <CandleStick symbol1="MSFT" />
+
       </div>}
       {<div className='donut-container'>
-        <Donut title={"Big Five Market Cap"} labels={bigFive} dataset={marketCaps}/>
-        <Donut title={"News Stories Today"} labels={bigFive} dataset={newsData}/>
+        <Donut title={"Market Cap"} labels={bigFive} dataset={marketCaps}/>
         <Donut title={"Come Up With Another Dataset"} labels={bigFive} dataset={marketCaps}/>
+        <Donut title={"Opening Share Prices"} labels={bigFive} dataset={openPrices}/>
       </div>}
     </div>
   );
@@ -55,13 +59,14 @@ async function fetchMarketCaps(symbols) {
               console.error(error);
               reject(error);
             } else {
-              resolve(parseInt(data['marketCapitalization']));
+              resolve(data['marketCapitalization']);
             }
           });
         });
       })
     );
 
+    // Process the marketCaps array
     marketCaps.forEach((marketCap, index) => {
       console.log(`${symbols[index]} market cap: ${parseInt(marketCap)}`);
     });
@@ -71,33 +76,37 @@ async function fetchMarketCaps(symbols) {
   }
 };
 
-const fetchNews = async (symbols) => {
-  let today = new Date();
-  const year = today.getFullYear();
-  let month = today.getMonth() + 1; // months are zero indexed
-  let day = today.getDate();
 
-  // prepend month or day with zero if single digit
-  if (month < 10) {
-    month = `0${month}`;
+async function fetchOpenPrices(symbols) {
+  try {
+    const finnhub = require('finnhub');
+    const api_key = finnhub.ApiClient.instance.authentications['api_key'];
+    api_key.apiKey = process.env.REACT_APP_FINNHUB_API_KEY;
+    const finnhubClient = new finnhub.DefaultApi();
+
+    const openPrices = await Promise.all(
+      symbols.map((symbol) => {
+        return new Promise((resolve, reject) => {
+          finnhubClient.quote(symbol, (error, data) => {
+            if (error) {
+              console.error(error);
+              reject(error);
+            } else {
+              resolve(data['o']);
+            }
+          });
+        });
+      })
+    );
+
+    // Process the openPrices array
+    openPrices.forEach((openPrice, index) => {
+      console.log(`${symbols[index]} open price: ${openPrice}`);
+    });
+
+    return openPrices;
+  } catch (error) {
+    console.error(error);
   }
-  if (day < 10) {
-    day = `0${day}`;
-  }
-
-  today = `${year}-${month}-${day}`;
-
-  const numStories = await Promise.all(
-    symbols.map(async (symbol) => {
-      const response = await fetch(`https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=${today}&to=${today}&token=${process.env.REACT_APP_FINNHUB_API_KEY}`);
-      if (!response.ok) {
-        console.error(`HTTP error! status: ${response.status}`);
-        return;
-      }
-      const data = await response.json();
-      return data.length;
-    })
-  );
-
-  return numStories;
 }
+       
