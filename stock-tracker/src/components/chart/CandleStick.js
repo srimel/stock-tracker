@@ -103,7 +103,7 @@ const CandleStick = (props) => {
         ? [getCandleDataSeries(symbol1Data, props.symbol1)]
         : [];
 
-      let titleText = props.symbol1;
+      let titleText = props.symbol1.toUpperCase();
       if (props.symbol2) {
         let symbol2Data;
         try {
@@ -113,7 +113,7 @@ const CandleStick = (props) => {
         }
         if (symbol2Data) {
           dataSeries.push(getCandleDataSeries(symbol2Data, props.symbol2));
-          titleText = `${props.symbol1} vs ${props.symbol2}`;
+          titleText = `${props.symbol1.toUpperCase()} vs ${props.symbol2.toUpperCase()}`;
         }
       }
 

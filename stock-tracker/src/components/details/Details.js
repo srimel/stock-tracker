@@ -40,7 +40,9 @@ function Details() {
       }
       try {
         const response = await fetch(
-          `https://finnhub.io/api/v1/stock/metric?symbol=${symbol}&metric=all&token=${process.env.REACT_APP_FINNHUB_API_KEY}`,
+          `https://finnhub.io/api/v1/stock/metric?symbol=${symbol.toUpperCase()}&metric=all&token=${
+            process.env.REACT_APP_FINNHUB_API_KEY
+          }`,
         );
         const data = await response.json();
         console.log('metricsData', data);
@@ -74,7 +76,9 @@ function Details() {
           );
         }
         const profileResponse = await fetch(
-          `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${process.env.REACT_APP_FINNHUB_API_KEY}`,
+          `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol.toUpperCase()}&token=${
+            process.env.REACT_APP_FINNHUB_API_KEY
+          }`,
         );
         const profileData = await profileResponse.json();
 
@@ -125,7 +129,7 @@ function Details() {
               <p>Revenue per Share (Annual): {metrics.revenuePerShare}</p>
               {symbol && (
                 <div className="d-flex justify-content-center">
-                  <CandleStick symbol1={symbol} />{' '}
+                  <CandleStick symbol1={symbol.toUpperCase()} />{' '}
                 </div>
               )}
             </>
