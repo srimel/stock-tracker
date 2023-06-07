@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useMemo } from 'react';
-import { ArcElement, Chart, DoughnutController, Legend, Title } from 'chart.js';
+import { ArcElement, Chart, DoughnutController, Legend, Title, Tooltip } from 'chart.js';
 import './Donut.css';
 
 //const totalTechMarketCap = 21852000;
@@ -84,12 +84,23 @@ const Donut = ({title, labels, dataset}) => {
                 padding: 30,
               },
             },
+            tooltip: {
+              enabled: true,
+              callbacks: {
+                label: function (context) {
+                  const value = context.raw || '';
+
+                  // Customize the tooltip label
+                  return `${value}`;
+                },
+              },
+            },
           },
         },
       });
     };
 
-    Chart.register(ArcElement, DoughnutController, Legend, Title);
+    Chart.register(ArcElement, DoughnutController, Legend, Title, Tooltip);
     renderChart();
 
   }, [title, labels, dataset, backgroundColors, borderColors]);
