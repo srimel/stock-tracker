@@ -9,6 +9,10 @@ const CandleStick = (props) => {
   const chartRef = useRef(null);
   const [invalidData, setInvalidData] = useState(false);
 
+  function isSymbolValid(symbol) {
+    return /^[A-Za-z]+$/.test(symbol);
+  }
+
   useEffect(() => {
     function getCandleDataSeries(candleData, symbol) {
       if (
@@ -76,6 +80,14 @@ const CandleStick = (props) => {
     }
 
     async function createCandleChart() {
+      if (
+        !isSymbolValid(props.symbol1) ||
+        (props.symbol2 && !isSymbolValid(props.symbol2))
+      ) {
+        setInvalidData(true);
+        return;
+      }
+
       if (chartRef.current) {
         chartRef.current.destroy();
       }
