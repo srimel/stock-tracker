@@ -4,11 +4,6 @@ import CandleStick from '../chart/CandleStick';
 import Details from '../details/Details';
 import Donut from '../chart/Donut';
 
-// Per wireframe:
-// Home page will contain a search input for bringing up the stock details modal.
-// Home page will contain three candlestick charts for common stocks?. Composite indices are premium finnhub features.
-// Home page will coantain a sector map or some other chart thing.
-
 function Home() {
   const [marketCaps, setMarketCaps] = useState([]);
   const [newsData, setNewsData] = useState([]);
@@ -20,8 +15,8 @@ function Home() {
     const fetchData = async () => {
       const marketCaps = await fetchMarketCaps(bigFive);
       const news = await fetchNews(bigFive);
-      setNewsData(news);
       setMarketCaps(marketCaps);
+      setNewsData(news);
     };
     fetchData();
   }, [bigFive]);
