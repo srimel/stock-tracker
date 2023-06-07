@@ -36,7 +36,6 @@ function Details() {
   useEffect(() => {
     const fetchMetrics = async () => {
       if (!symbol) {
-        setErrorMessage('Please enter a stock symbol.');
         return;
       }
       try {
