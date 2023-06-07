@@ -11,7 +11,7 @@ function Header() {
     <div className="header mb-5">
       <Ticker />
       <div className="d-flex justify-content-center">
-        <h1>Stock Tracker</h1>
+        <h1 className='title'>Stock Tracker</h1>
       </div>
       <Navigation />
     </div>
