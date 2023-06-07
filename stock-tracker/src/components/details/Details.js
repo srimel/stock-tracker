@@ -29,14 +29,18 @@ function Details() {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    setSymbol(search);
-    setShow(true);
+    if (search.trim() === '') {
+      setErrorMessage('Please enter a valid stock symbol.');
+    } else {
+      setSymbol(search);
+      setErrorMessage('');
+      setShow(true);
+    }
   };
 
   useEffect(() => {
     const fetchMetrics = async () => {
       if (!symbol) {
-        setErrorMessage('Please enter a stock symbol.');
         return;
       }
       try {
@@ -130,7 +134,7 @@ function Details() {
               <p>Revenue per Share (Annual): {metrics.revenuePerShare}</p>
               {symbol && (
                 <div className="d-flex justify-content-center">
-                  <CandleStick symbol1={symbol.toUpperCase()} />{' '}
+                  <CandleStick symbol1={symbol.toUpperCase()} id="1" />{' '}
                 </div>
               )}
             </>
