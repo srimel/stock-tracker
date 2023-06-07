@@ -1,5 +1,6 @@
 import './Home.css';
 import CandleStick from '../chart/CandleStick';
+import Details from '../details/Details';
 
 // Per wireframe:
 // Home page will contain a search input for bringing up the stock details modal.
@@ -9,13 +10,14 @@ import CandleStick from '../chart/CandleStick';
 function Home() {
   return (
     <div className="home">
-      {/* <SearchInputForStockDetails /> */}
+      {/* {<SearchInputForStockDetails />} */}
+      <Details />
       <div className="chart-container">
         <CandleStick symbol1="AAPL" />
         <CandleStick symbol1="TSLA" />
         <CandleStick symbol1="AMZN" />
       </div>
-      {/* <SectorMap /> */}
+      {/* {<SectorMap />} */}
     </div>
   );
 }
