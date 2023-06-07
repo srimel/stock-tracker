@@ -92,7 +92,7 @@ const Ticker = () => {
             <span className="stock-price">
               {stock.price}
             </span>
-            <div className="stock-change-wrapper d-flex justify-content-center">
+            <div className="stock-change-wrapper justify-content-center">
               <div className={`stock-change ${stock.change < 0 ? 'negative' :
                                stock.change > 0 ? 'positive' : ''}`}>
                 <span className={`arrow ${stock.change < 0 ? 'negative' : ''}`}>
