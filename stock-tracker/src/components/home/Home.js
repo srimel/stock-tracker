@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './Home.css';
-//import CandleStick from '../chart/CandleStick';
+import CandleStick from '../chart/CandleStick';
 import Donut from '../chart/Donut';
 import '../chart/Donut.css';
 
@@ -8,6 +8,39 @@ import '../chart/Donut.css';
 // Home page will contain a search input for bringing up the stock details modal.
 // Home page will contain three candlestick charts for common stocks?. Composite indices are premium finnhub features.
 // Home page will coantain a sector map or some other chart thing.
+
+function Home() {
+  const [marketCaps, setMarketCaps] = useState([]);
+  const bigFive = useMemo(
+    () => ['AAPL', 'AMZN', 'GOOGL', 'META', 'MSFT'], []
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const marketCaps = await fetchMarketCaps(bigFive);
+      setMarketCaps(marketCaps);
+    };
+    fetchData()
+  }, [bigFive]);
+
+  return (
+    <div className="home">
+      {/* <SearchInputForStockDetails /> */}
+      {<div className="chart-container">
+        <CandleStick symbol1="AAPL" />
+        <CandleStick symbol1="TSLA" />
+        <CandleStick symbol1="AMZN" />
+      </div>}
+      {<div className='donut-container'>
+        <Donut title={"Big Five Market Cap"} labels={bigFive} dataset={marketCaps}/>
+        <Donut title={"Come Up With Another Dataset"} labels={bigFive} dataset={marketCaps}/>
+        <Donut title={"Come Up With Another Dataset"} labels={bigFive} dataset={marketCaps}/>
+      </div>}
+    </div>
+  );
+}
+
+export default Home;
 
 async function fetchMarketCaps(symbols) {
   try {
@@ -41,34 +74,3 @@ async function fetchMarketCaps(symbols) {
   }
 };
 
-function Home() {
-  const [marketCaps, setMarketCaps] = useState([]);
-  const bigFive = useMemo(
-    () => ['AAPL', 'AMZN', 'GOOGL', 'META', 'MSFT'], []
-  );
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const marketCaps = await fetchMarketCaps(bigFive);
-      setMarketCaps(marketCaps);
-    };
-    fetchData()
-  }, [bigFive]);
-
-  return (
-    <div className="home">
-      {/* <SearchInputForStockDetails /> */}
-      <div className='donut-container'>
-        <Donut title={"Big Five Market Cap"} labels={bigFive} dataset={marketCaps}/>
-      </div>
-      {/*<div className="chart-container">
-        <CandleStick symbol1="AAPL" />
-        <CandleStick symbol1="TSLA" />
-        <CandleStick symbol1="AMZN" />
-      </div>*/}
-      {/* <SectorMap /> */}
-    </div>
-  );
-}
-
-export default Home;
