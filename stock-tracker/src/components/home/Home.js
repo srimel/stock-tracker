@@ -59,7 +59,7 @@ function Home() {
     <div className="home">
       {/* <SearchInputForStockDetails /> */}
       <div className='donut-container'>
-        <Donut labels={bigFive} dataset={marketCaps} title={"Big Five Market Cap"}/>
+        <Donut title={"Big Five Market Cap"} labels={bigFive} dataset={marketCaps}/>
       </div>
       {/*<div className="chart-container">
         <CandleStick symbol1="AAPL" />
