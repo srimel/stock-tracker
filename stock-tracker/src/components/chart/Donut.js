@@ -88,11 +88,10 @@ const Donut = ({title, labels, dataset}) => {
               enabled: true,
               callbacks: {
                 label: function (context) {
-                  const label = context.label || '';
                   const value = context.raw || '';
 
                   // Customize the tooltip label
-                  return `${label}: ${value}`;
+                  return `${value}`;
                 },
               },
             },
