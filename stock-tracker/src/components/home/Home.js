@@ -12,6 +12,7 @@ import '../chart/Donut.css';
 
 function Home() {
   const [marketCaps, setMarketCaps] = useState([]);
+  const [newsData, setNewsData] = useState([]);
   const bigFive = useMemo(
     () => ['AAPL', 'AMZN', 'GOOGL', 'META', 'MSFT'], []
   );
@@ -21,7 +22,15 @@ function Home() {
       const marketCaps = await fetchMarketCaps(bigFive);
       setMarketCaps(marketCaps);
     };
-    fetchData()
+    fetchData();
+  }, [bigFive]);
+
+  useEffect(() => {
+    const fetchNewsData = async () => {
+      const news = await fetchNews(bigFive);
+      setNewsData(news);
+    };
+    fetchNewsData();
   }, [bigFive]);
 
   return (
@@ -34,7 +43,7 @@ function Home() {
       </div>}
       {<div className='donut-container'>
         <Donut title={"Big Five Market Cap"} labels={bigFive} dataset={marketCaps}/>
-        <Donut title={"Come Up With Another Dataset"} labels={bigFive} dataset={marketCaps}/>
+        <Donut title={"News Stories Today"} labels={bigFive} dataset={newsData}/>
         <Donut title={"Come Up With Another Dataset"} labels={bigFive} dataset={marketCaps}/>
       </div>}
     </div>
@@ -75,3 +84,33 @@ async function fetchMarketCaps(symbols) {
   }
 };
 
+const fetchNews = async (symbols) => {
+  let today = new Date();
+  const year = today.getFullYear();
+  let month = today.getMonth() + 1; // months are zero indexed
+  let day = today.getDate();
+
+  // prepend month or day with zero if single digit
+  if (month < 10) {
+    month = `0${month}`;
+  }
+  if (day < 10) {
+    day = `0${day}`;
+  }
+
+  today = `${year}-${month}-${day}`;
+
+  const numStories = await Promise.all(
+    symbols.map(async (symbol) => {
+      const response = await fetch(`https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=${today}&to=${today}&token=${process.env.REACT_APP_FINNHUB_API_KEY}`);
+      if (!response.ok) {
+        console.error(`HTTP error! status: ${response.status}`);
+        return;
+      }
+      const data = await response.json();
+      return data.length;
+    })
+  );
+
+  return numStories;
+}
