@@ -34,12 +34,13 @@
 .stock-symbol {
   font-weight: bold;
   font-size: 12px;
-  margin-right: 7px;
+  margin-right: 5px;
 }
 
 /* Handle changePercent and change together */
 .stock-change-wrapper {
   display: flex;
+  width: 64px;
   align-items: center;
   margin-top: 1px;
   justify-content: center;

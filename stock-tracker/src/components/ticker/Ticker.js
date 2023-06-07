@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useWebSocket from 'react-use-websocket';
-//import './ticker.css';
+import './Ticker.css';
 
 const Ticker = () => {
   const tickerContainerRef = useRef(null);
@@ -13,9 +13,9 @@ const Ticker = () => {
     ]
       .map((symbol) => ({
         symbol,
-        price: "000.00",
-        change: "0.00",
-        changePercent: "0.00",
+        price: Number(0).toFixed(3),
+        change: Number(0).toFixed(2),
+        changePercent: Number(0).toFixed(2),
       }))
   );
   //  Configure socket for receiving stock data
@@ -38,13 +38,13 @@ const Ticker = () => {
                 (trade) => trade.s === stock.symbol);
               if (match) {
                 const diff = match.p - stock.price;
-                const changePercent = stock.price !== 0 ?
-                  (diff / stock.price * 100).toFixed(2) : 0;
+                const changePercent = Number(stock.price) !== 0 ?
+                  (diff / Number(stock.price) * 100).toFixed(2) : 0;
                 return {
                   ...stock,
                   price: Number(match.p).toFixed(2),
                   change: Number(diff).toFixed(2),
-                  changePercent: `${changePercent}%`,
+                  changePercent: isFinite(changePercent) ? `${Number(changePercent).toFixed(2)}%` : Number(0).toFixed(2),
                 };
               }
             } catch (error) {
@@ -92,7 +92,7 @@ const Ticker = () => {
             <span className="stock-price">
               {stock.price}
             </span>
-            <div className="stock-change-wrapper justify-content-center">
+            <div className="stock-change-wrapper">
               <div className={`stock-change ${stock.change < 0 ? 'negative' :
                                stock.change > 0 ? 'positive' : ''}`}>
                 <span className={`arrow ${stock.change < 0 ? 'negative' : ''}`}>
@@ -103,7 +103,7 @@ const Ticker = () => {
                   {stock.changePercent}
                 </span>
                 <span className="stock-change">
-                  ({stock.change === 0 ? "0.00" : stock.change})
+                  ({stock.change === 0 ? Number(0).toFixed(2) : stock.change})
                 </span>
               </div>
             </div>
