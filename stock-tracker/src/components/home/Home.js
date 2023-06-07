@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './Home.css';
 import CandleStick from '../chart/CandleStick';
+import Details from '../details/Details';
 import Donut from '../chart/Donut';
 import '../chart/Donut.css';
 
@@ -25,7 +26,7 @@ function Home() {
 
   return (
     <div className="home">
-      {/* <SearchInputForStockDetails /> */}
+      {<Details />}
       {<div className="chart-container">
         <CandleStick symbol1="AAPL" />
         <CandleStick symbol1="TSLA" />
