@@ -7,9 +7,29 @@ import './CandleStick.css';
 const CandleStick = (props) => {
   const [timeFrame, setTimeFrame] = useState(7884000);
   const chartRef = useRef(null);
+  const [invalidData, setInvalidData] = useState(false);
 
   useEffect(() => {
     function getCandleDataSeries(candleData, symbol) {
+      if (
+        !candleData ||
+        !Array.isArray(candleData.t) ||
+        !Array.isArray(candleData.o) ||
+        !Array.isArray(candleData.h) ||
+        !Array.isArray(candleData.l) ||
+        !Array.isArray(candleData.c) ||
+        candleData.t.length !== candleData.o.length ||
+        candleData.t.length !== candleData.h.length ||
+        candleData.t.length !== candleData.l.length ||
+        candleData.t.length !== candleData.c.length
+      ) {
+        console.error(`Invalid candle data for symbol ${symbol}`);
+        setInvalidData(true);
+        return {
+          name: symbol,
+          data: [], // Return an empty data series for invalid candle data
+        };
+      }
       const len = candleData.t.length;
       let dataSeries = [];
       for (let i = 0; i < len; i++) {
@@ -46,10 +66,8 @@ const CandleStick = (props) => {
           currentDate,
           (error, data, response) => {
             if (error) {
-              console.error(error);
               reject(error);
             } else {
-              console.log(data);
               resolve(data);
             }
           },
@@ -62,17 +80,30 @@ const CandleStick = (props) => {
         chartRef.current.destroy();
       }
 
-      let symbol1Data = await getStockData(props.symbol1);
-      let dataSeries = [getCandleDataSeries(symbol1Data, props.symbol1)];
+      let symbol1Data;
+      try {
+        symbol1Data = await getStockData(props.symbol1);
+      } catch (error) {
+        symbol1Data = null;
+      }
+
+      let dataSeries = symbol1Data
+        ? [getCandleDataSeries(symbol1Data, props.symbol1)]
+        : [];
 
       let titleText = props.symbol1;
       if (props.symbol2) {
-        let symbol2Data = await getStockData(props.symbol2);
-        dataSeries.push(getCandleDataSeries(symbol2Data, props.symbol2));
-        titleText = `${props.symbol1} vs ${props.symbol2}`;
+        let symbol2Data;
+        try {
+          symbol2Data = await getStockData(props.symbol2);
+        } catch (error) {
+          symbol2Data = null;
+        }
+        if (symbol2Data) {
+          dataSeries.push(getCandleDataSeries(symbol2Data, props.symbol2));
+          titleText = `${props.symbol1} vs ${props.symbol2}`;
+        }
       }
-
-      console.log(`${titleText} data series:`, dataSeries);
 
       var options = {
         series: dataSeries,
@@ -111,13 +142,12 @@ const CandleStick = (props) => {
       chartRef.current = newChart;
     }
 
-    // getStockData(props.symbol1);
     createCandleChart();
   }, [props.symbol1, props.symbol2, timeFrame]);
 
   const chartID = `chart-${props.symbol1}`;
 
-  return (
+  return !invalidData ? (
     <div className="candlestick mb-5">
       <div id={chartID}></div>
       <div className="buttons-container">
@@ -146,7 +176,7 @@ const CandleStick = (props) => {
         </ToggleButtonGroup>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default CandleStick;
