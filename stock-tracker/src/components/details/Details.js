@@ -134,7 +134,7 @@ function Details() {
               <p>Revenue per Share (Annual): {metrics.revenuePerShare}</p>
               {symbol && (
                 <div className="d-flex justify-content-center">
-                  <CandleStick symbol1={symbol.toUpperCase()} />{' '}
+                  <CandleStick symbol1={symbol.toUpperCase()} id="1" />{' '}
                 </div>
               )}
             </>

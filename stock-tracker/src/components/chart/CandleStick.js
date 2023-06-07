@@ -145,7 +145,7 @@ const CandleStick = (props) => {
         },
       };
 
-      const chartID = `chart-${props.symbol1}`;
+      const chartID = `chart-${props.symbol1}-${props.id}`;
       const newChart = new ApexCharts(
         document.querySelector(`#${chartID}`),
         options,
@@ -155,9 +155,9 @@ const CandleStick = (props) => {
     }
 
     createCandleChart();
-  }, [props.symbol1, props.symbol2, timeFrame]);
+  }, [props.id, props.symbol1, props.symbol2, timeFrame]);
 
-  const chartID = `chart-${props.symbol1}`;
+  const chartID = `chart-${props.symbol1}-${props.id}`;
 
   return !invalidData ? (
     <div className="candlestick mb-5">
